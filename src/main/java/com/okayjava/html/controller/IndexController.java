@@ -1,15 +1,20 @@
 package com.okayjava.html.controller;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.okayjava.html.model.User;
+import com.okayjava.html.entity.User;
+import com.okayjava.html.service.UserService;
 
-@Controller
+@RestController
 public class IndexController {
+	
+	@Autowired
+	UserService userServ;
 
 	@GetMapping("/")
 	public String index() {
@@ -18,15 +23,11 @@ public class IndexController {
 	}
 	
 	@PostMapping("/register")
-	public String userRegistration(@ModelAttribute User user, Model model) {
+	public User userRegistration(@ModelAttribute User user, Model model) {
 		System.out.println(user.toString());
-		// validate 
-		System.out.println(user.getFname());
-		System.out.println(user.getLname());
-		System.out.println(user.getDob());
-		System.out.println(user.getEmail());
-		model.addAttribute("firstname", user.getFname());
-		model.addAttribute("lastname", user.getLname());
-		return "welcome";
+
+		model.addAttribute("firstname", user.getFirstname());
+		model.addAttribute("lastname", user.getLastname());
+		return userServ.saveUserInfo1(user);
 	}
 }
